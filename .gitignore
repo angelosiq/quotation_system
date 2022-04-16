@@ -436,6 +436,7 @@ venv/
 credentials.json
 firebase_credentials.json
 docker-compose.yaml
+docker-compose.yml
 
 token.pickle
 spreadsheets_credentials.json
