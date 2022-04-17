@@ -13,21 +13,24 @@ class CurrencySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RateSerializer(serializers.ModelSerializer):
-    """Serializer for Rate model."""
-
-    class Meta:
-        """Meta for Rate model serializer."""
-
-        model = Rate
-        fields = '__all__'
-
-
 class RateCurrencySerializer(serializers.ModelSerializer):
     """Serializer for RateCurrency model."""
+    currency = CurrencySerializer()
 
     class Meta:
         """Meta for RateCurrency model serializer."""
 
         model = RateCurrency
         fields = '__all__'
+
+
+class RateSerializer(serializers.ModelSerializer):
+    """Serializer for Rate model."""
+    base = CurrencySerializer(source='base_currency')
+    rates = RateCurrencySerializer(source='ratecurrency_set', many=True)
+
+    class Meta:
+        """Meta for Rate model serializer."""
+
+        model = Rate
+        fields = ('date', 'base', 'rates')
