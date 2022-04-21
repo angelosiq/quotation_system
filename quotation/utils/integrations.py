@@ -1,5 +1,4 @@
 import datetime
-from email.mime import base
 
 import requests
 
@@ -53,6 +52,9 @@ def get_rates():
 
 
 def get_data():
+    currencies = Currency.objects.all()
+    currencies.delete()
+
     currencies = get_currencies()
     rates = get_rates()
 

@@ -3,7 +3,7 @@ from quotation import views
 
 
 router = routers.SimpleRouter()
-router.register('currency', views.CurrencyViewSet)
-router.register('rate', views.RateViewSet)
+router.register('currencies', views.CurrencyViewSet)
+router.register('rates', views.RateViewSet)
 
 rest_urlpatterns = router.urls
