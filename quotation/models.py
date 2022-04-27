@@ -1,5 +1,9 @@
+from collections import defaultdict
+
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 
 
 class Currency(models.Model):
@@ -40,6 +44,17 @@ class Rate(models.Model):
 
     def __str__(self):
         return f"{self.base_currency.code} - {self.date.strftime('%Y-%m-%d')}"
+
+    @cached_property
+    def chart_rates(self):
+        data = self.ratecurrency_set.all().values_list('currency__code', 'rate__date', 'value')
+        chart_data = defaultdict(list)
+        for element in data:
+            date = timezone.datetime.combine(element[1], timezone.datetime.min.time())
+            date = timezone.datetime.timestamp(date)*1000
+            chart_data[element[0]].append([date, element[2]])
+            
+        return chart_data
 
 
 class RateCurrency(models.Model):

@@ -24,6 +24,7 @@ ApiSchemaView = get_schema_view(
 )
 
 urlpatterns = [
+    path('', include('core.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(REST_URL_PATTERNS)),
     path('api/doc/', ApiSchemaView.with_ui('redoc', cache_timeout=0), name='schema-redoc')

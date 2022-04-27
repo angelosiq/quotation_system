@@ -1,7 +1,8 @@
 import datetime
-from email.mime import base
 
 import requests
+
+from django.utils.translation import ugettext_lazy as _
 
 from core.models import Settings
 
@@ -13,7 +14,10 @@ VALID_CURRENCIES = ["EUR", "USD", "JPY", "BRL"]
 
 def get_currencies():
     settings = Settings.get_solo()
-    currencies = requests.get(url=f"{settings.quotation_api}currencies").json()
+    if settings.quotation_api:
+        currencies = requests.get(url=f"{settings.quotation_api}currencies").json()
+    else:
+        raise Exception(_('API inválida.'))
     currency_list = []
     for code, data in currencies.items():
         if code in VALID_CURRENCIES:
@@ -53,6 +57,9 @@ def get_rates():
 
 
 def get_data():
+    currencies = Currency.objects.all()
+    currencies.delete()
+
     currencies = get_currencies()
     rates = get_rates()
 

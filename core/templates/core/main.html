@@ -1,0 +1,83 @@
+{% extends 'quotation_system/base.html' %}
+
+{% load i18n %}
+
+{% block main_title %}Gráficos{% endblock main_title %}
+
+{% block style %}
+
+<style>
+    #chart {
+        height: 600px;
+        width: 800px;
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div id="chart"></div>
+    </div>
+{% endblock body %}
+
+{% block script %}
+<script>
+    let seriesOptions = [];
+
+    $(document).ready(function(){
+        axios.get('/api/rates/rate_chart/')
+            .then(function (response) {
+                console.log(response.data);
+                Object.entries(response.data).forEach(([currency, values]) => {
+                    seriesOptions.push({
+                        name: currency,
+                        data: values
+                    });
+                });
+
+                createChart();
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    function createChart() {
+        Highcharts.stockChart('chart', {
+            rangeSelector: {
+                selected: 4
+            },
+
+            yAxis: {
+                labels: {
+                    formatter: function () {
+                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                    }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 2,
+                    color: 'silver'
+                }]
+            },
+
+            plotOptions: {
+                series: {
+                    compare: 'percent',
+                    showInNavigator: true
+                }
+            },
+
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                valueDecimals: 8,
+                split: true
+            },
+
+            series: seriesOptions
+        });
+    }
+</script>
+
+{% endblock %}
