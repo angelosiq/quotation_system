@@ -18,7 +18,16 @@ whitenoise = "^6.0.0"
 [tool.poetry.dev-dependencies]
 django-extensions = "^3.1.5"
 ipython = "^8.2.0"
+pytest = "^7.1.2"
+pytest-django = "^4.5.2"
+model-bakery = "^1.5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "quotation_system.settings"
+django_debug_mode = true
+python_files = "tests.py test_*.py *_tests.py"
+addopts = "-x -p no:warnings --strict-markers --no-migrations"
