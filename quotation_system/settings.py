@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party apps
+    'django_crontab',
     'rest_framework',
     'solo',
     'drf_yasg',
@@ -133,3 +134,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRONJOBS = [
+    ('0 17 * * *', 'django.core.management.call_command', ['set_up_data']),
+]
