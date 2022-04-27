@@ -2,6 +2,8 @@ import datetime
 
 import requests
 
+from django.utils.translation import ugettext_lazy as _
+
 from core.models import Settings
 
 from quotation.models import Currency, Rate, RateCurrency
@@ -12,7 +14,10 @@ VALID_CURRENCIES = ["EUR", "USD", "JPY", "BRL"]
 
 def get_currencies():
     settings = Settings.get_solo()
-    currencies = requests.get(url=f"{settings.quotation_api}currencies").json()
+    if settings.quotation_api:
+        currencies = requests.get(url=f"{settings.quotation_api}currencies").json()
+    else:
+        raise Exception(_('API inválida.'))
     currency_list = []
     for code, data in currencies.items():
         if code in VALID_CURRENCIES:

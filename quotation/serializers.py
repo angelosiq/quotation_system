@@ -26,6 +26,7 @@ class RateCurrencySerializer(serializers.ModelSerializer):
 
 class RateSerializer(serializers.ModelSerializer):
     """Serializer for Rate model."""
+
     base = CurrencySerializer(source='base_currency')
     rates = RateCurrencySerializer(source='ratecurrency_set', many=True)
 

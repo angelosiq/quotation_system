@@ -8,45 +8,76 @@
 
 <style>
     #chart {
-        height: 400px;
-        min-width: 310px;
+        height: 600px;
+        width: 800px;
     }
 </style>
 
 {% endblock %}
 
 {% block body %}
-    <div id="chart"></div>
+    <div class="row justify-content-center">
+        <div id="chart"></div>
+    </div>
 {% endblock body %}
 
 {% block script %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const chart = Highcharts.chart('chart', {
-            chart: {
-                type: 'bar'
+    let seriesOptions = [];
+
+    $(document).ready(function(){
+        axios.get('/api/rates/rate_chart/')
+            .then(function (response) {
+                console.log(response.data);
+                Object.entries(response.data).forEach(([currency, values]) => {
+                    seriesOptions.push({
+                        name: currency,
+                        data: values
+                    });
+                });
+
+                createChart();
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    function createChart() {
+        Highcharts.stockChart('chart', {
+            rangeSelector: {
+                selected: 4
             },
-            title: {
-                text: 'Fruit Consumption'
-            },
-            xAxis: {
-                categories: ['Apples', 'Bananas', 'Oranges']
-            },
+
             yAxis: {
-                title: {
-                    text: 'Fruit eaten'
+                labels: {
+                    formatter: function () {
+                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                    }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 2,
+                    color: 'silver'
+                }]
+            },
+
+            plotOptions: {
+                series: {
+                    compare: 'percent',
+                    showInNavigator: true
                 }
             },
-            series: [{
-                name: 'Jane',
-                data: [1, 0, 4]
-            }, {
-                name: 'John',
-                data: [5, 7, 3]
-            }]
+
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                valueDecimals: 8,
+                split: true
+            },
+
+            series: seriesOptions
         });
-    });
+    }
 </script>
 
 {% endblock %}
