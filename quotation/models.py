@@ -47,7 +47,7 @@ class Rate(models.Model):
 
     @cached_property
     def chart_rates(self):
-        data = self.ratecurrency_set.all().values_list('currency__code', 'rate__date', 'value')
+        data = self.ratecurrency_set.all().order_by('-rate__date').values_list('currency__code', 'rate__date', 'value')
         chart_data = defaultdict(list)
         for element in data:
             date = timezone.datetime.combine(element[1], timezone.datetime.min.time())

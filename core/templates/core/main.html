@@ -28,11 +28,10 @@
     $(document).ready(function(){
         axios.get('/api/rates/rate_chart/')
             .then(function (response) {
-                console.log(response.data);
                 Object.entries(response.data).forEach(([currency, values]) => {
                     seriesOptions.push({
                         name: currency,
-                        data: values
+                        data: values,
                     });
                 });
 
@@ -45,8 +44,12 @@
 
     function createChart() {
         Highcharts.stockChart('chart', {
-            rangeSelector: {
-                selected: 4
+            chart: {
+                zoomType: 'x'
+            },
+
+            xAxis: {
+                type: 'datetime',
             },
 
             yAxis: {
@@ -61,6 +64,10 @@
                     color: 'silver'
                 }]
             },
+            
+            rangeSelector: {
+                selected: 4,
+            },
 
             plotOptions: {
                 series: {
@@ -71,7 +78,7 @@
 
             tooltip: {
                 pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-                valueDecimals: 8,
+                valueDecimals: 2,
                 split: true
             },
 
