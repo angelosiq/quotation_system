@@ -10,6 +10,10 @@ services:
     environment:
       DEBUG: "False"
       ALLOWED_HOSTS: "*"
+      DB_HOST: "postgres"
+      DB_NAME: "quotation"
+      DB_USER: "quotation"
+      DB_PASSWORD: "quotation_password"
     depends_on:
       - postgres
     networks:
@@ -17,14 +21,14 @@ services:
   postgres:
     image: postgres:14
     environment:
-      POSTGRES_NAME: "quotationdb"
+      POSTGRES_NAME: "quotation"
       POSTGRES_USER: "quotation"
       POSTGRES_PASSWORD: "quotation_password"
       POSTGRES_HOST_AUTH_METHOD: "trust"
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data/
+      - ./postgres_data/:/var/lib/postgresql/data/
     networks:
       - quotation_net
   pgadmin:
@@ -39,6 +43,8 @@ services:
     networks:
       - quotation_net
 
+volumes:
+  postgres_data:
 networks:
   quotation_net:
     driver: bridge

@@ -37,8 +37,11 @@ def get_rates():
 
     while count_days < 5:
         date_string = date.strftime('%Y-%m-%d')
-        rates_response = requests.get(
-            url=f"{settings.quotation_api}rates?base={base_currency.code}&date={date_string}").json()
+        if settings.quotation_api:
+            rates_response = requests.get(
+                url=f"{settings.quotation_api}rates?base={base_currency.code}&date={date_string}").json()
+        else:
+            raise Exception(_('API inválida.'))
 
         if date_string == rates_response.get('date'):
             rate = Rate.objects.get_or_create(date=date, base_currency=base_currency)[0]

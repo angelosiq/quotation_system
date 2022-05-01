@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     'quotation'
 ]
 
-if DEBUG:
-    INSTALLED_APPS.append('django_extensions')
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -82,8 +79,8 @@ WSGI_APPLICATION = 'quotation_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'NAME': config('DB_NAME', default='quotationdb'),
+        'HOST': config('DB_HOST', default='postgres'),
+        'NAME': config('DB_NAME', default='quotation'),
         'USER': config('DB_USER', default='quotation'),
         'PASSWORD': config('DB_PASSWORD', default='quotation_password'),
         'PORT': config('DB_PORT', default=5432, cast=int)
