@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    command: gunicorn quotation_system.wsgi:application -w 5 --threads 8 -b :8000 --timeout 900 --log-level=debug --limit-request-line 0
+    volumes:
+      - .:/app
+    environment:
+      DEBUG: "False"
+      ALLOWED_HOSTS: "*"
+    depends_on:
+      - postgres
+    networks:
+      - quotation_net
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_NAME: "quotationdb"
+      POSTGRES_USER: "quotation"
+      POSTGRES_PASSWORD: "quotation_password"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
+    networks:
+      - quotation_net
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "angeloasiqueira@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+    networks:
+      - quotation_net
+
+networks:
+  quotation_net:
+    driver: bridge

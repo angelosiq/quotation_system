@@ -1,5 +1,9 @@
 FROM python:3.9.12
 
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 WORKDIR /app
 
 COPY pyproject.toml .
@@ -14,7 +18,3 @@ RUN pip install --upgrade pip && \
 COPY . /app
 
 RUN python manage.py collectstatic --no-input --no-color
-
-CMD gunicorn probresult.wsgi:application -w 5 \
-    --threads 8 -b :$8005 --timeout 900 \
-    --log-level=debug --limit-request-line 0

@@ -66,6 +66,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+# Translations
+*.mo
+
 # Django stuff:
 
 # Flask stuff:
@@ -434,10 +437,5 @@ venv/
 .vscode/
 *.db
 credentials.json
-firebase_credentials.json
-
-token.pickle
-spreadsheets_credentials.json
-
-# Allow
-!pytest.ini
+.git/
+id_rsa
