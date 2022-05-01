@@ -9,6 +9,7 @@ WORKDIR /app
 COPY pyproject.toml .
 COPY poetry.lock .
 
+RUN apt-get update && apt-get -y install cron
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir poetry==1.0.3 && \
     poetry export --without-hashes -f requirements.txt -n -o requirements.txt && \
