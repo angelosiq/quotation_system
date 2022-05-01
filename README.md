@@ -2,6 +2,10 @@
 
 To set up the entire project use the make command.
 
+```sh
+make
+```
+
 What is going to happen?
 
 - Dockerfile will be build;
