@@ -161,6 +161,17 @@ python-versions = ">=3.6"
 Django = ">=2.2"
 
 [[package]]
+name = "django-pwa"
+version = "1.0.10"
+description = "A Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+django = ">=1.8"
+
+[[package]]
 name = "django-solo"
 version = "2.0.0"
 description = "Django Solo helps working with singletons"
@@ -658,7 +669,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "e70eecbd3721db2effe75346a636485f0483adcd83cd0a6b780db86558bad679"
+content-hash = "f3876c4fcc6e9e1e5742862b8e66319ba0f6ca2edd18ae89ae0990a35a13d603"
 
 [metadata.files]
 appnope = [
@@ -719,6 +730,10 @@ django-crontab = [
 django-extensions = [
     {file = "django-extensions-3.1.5.tar.gz", hash = "sha256:28e1e1bf49f0e00307ba574d645b0af3564c981a6dfc87209d48cb98f77d0b1a"},
     {file = "django_extensions-3.1.5-py3-none-any.whl", hash = "sha256:9238b9e016bb0009d621e05cf56ea8ce5cce9b32e91ad2026996a7377ca28069"},
+]
+django-pwa = [
+    {file = "django-pwa-1.0.10.tar.gz", hash = "sha256:07ed9dd57108838e3fe44b551a82032ca4ed76e31cb3c3e8d51604e0fe7e81e9"},
+    {file = "django_pwa-1.0.10-py3-none-any.whl", hash = "sha256:b1a2057b1e72c40c3a14beb90b958482da185f1d40a141fcae3d76580984b930"},
 ]
 django-solo = [
     {file = "django-solo-2.0.0.tar.gz", hash = "sha256:7c6dbe04ae858a4645b580ec83a31a960a067ad4525d8227cca50b7fc5983a62"},

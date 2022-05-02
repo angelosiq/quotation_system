@@ -5,10 +5,7 @@ services:
     ports:
       - "8000:8000"
     command: gunicorn quotation_system.wsgi:application -w 5 --threads 8 -b :8000 --timeout 900 --log-level=debug --limit-request-line 0
-    volumes:
-      - .:/app
     environment:
-      DEBUG: "True"
       ALLOWED_HOSTS: "*"
       DB_HOST: "postgres"
       DB_NAME: "quotation"
@@ -28,7 +25,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres_data/:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     networks:
       - quotation_net
   pgadmin:

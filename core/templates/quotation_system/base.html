@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load core_tags %}
 
 <!DOCTYPE html>
 
@@ -13,14 +14,16 @@
     <meta name="author" content="Angelo Siqueira">
 
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:url" content="">
+    <meta property="og:url" content="http://0.0.0.0:8000">
     <meta property="og:title" content="Quotation System">
     <meta property="og:site_name" content="Quotation System">
     <meta property="og:description" content="Charts app">
+    <meta property="og:image" content="{% static 'images/icons/icon-384x384.png' %}">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="384">
-    <meta property="og:image:height" content="384">
+    <meta property="og:image:height" content="384"> {% pwa %}
 
+    <link rel="shortcut icon" href="{% static 'images/icons/icon-384x384.png' %}" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <title>Quotation System | {% block main_title %}{% endblock main_title %}</title>

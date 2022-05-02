@@ -14,9 +14,12 @@ from pathlib import Path
 
 from decouple import config, Csv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from django.core.management.utils import get_random_secret_key
 
-SECRET_KEY = config('SECRET_KEY', default='__the_secret_key__')
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+SECRET_KEY = config('SECRET_KEY', default=get_random_secret_key())
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
@@ -35,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'solo',
     'drf_yasg',
+    'pwa',
 
     # local apps
     'core',

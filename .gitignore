@@ -435,7 +435,6 @@ venv/
 *.db
 credentials.json
 firebase_credentials.json
-.postgres_data/
 
 token.pickle
 spreadsheets_credentials.json
