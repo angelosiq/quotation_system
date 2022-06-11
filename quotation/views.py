@@ -23,14 +23,4 @@ class RateViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(methods=['get'], detail=False)
     def rate_chart(self, request):
-        response = defaultdict(list)
-        rate = Rate.objects.all()
-
-        if rate:
-            for r in rate:
-                for currency, values_list in r.chart_rates.items():
-                    response[currency].append(values_list[0])
-        else:
-            return Response("Nada encontrado.", status=status.HTTP_200_OK)
-
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(Rate.chart_formatted_data(), status=status.HTTP_200_OK)

@@ -1,34 +1,39 @@
-import pytest
-
-from collections import defaultdict
-
 from model_bakery import baker
 
-from django.utils import timezone
+from django.test import TestCase
 
 
-@pytest.mark.django_db
-def test_currency_str():
-    code = 'test'
-    currency = baker.make('quotation.Currency', code=code)
-    assert str(currency) == code
+class CurrencyModelTestCase(TestCase):
+    def setUp(self):
+        self.currency_code = "test"
+        self.currency = baker.make("quotation.Currency", code=self.currency_code)
+
+    def test_currency_str(self):
+        self.assertEquals(self.currency.code, self.currency_code)
 
 
-@pytest.mark.django_db
-def test_rate_str(currency_instance):
-    rate = baker.make('quotation.Rate', base_currency=currency_instance)
-    assert str(rate) == f"{currency_instance.code} - {rate.date.strftime('%Y-%m-%d')}"
+class RateModelTestCase(TestCase):
+    def setUp(self):
+        self.currency = baker.make("quotation.Currency")
+        self.rate = baker.make("quotation.Rate")
 
+    def test_rate_str(self):
+        self.rate.base_currency = self.currency
+        self.rate.save()
+        self.assertEquals(str(self.rate), f"{self.currency.code} - {self.rate.date.strftime('%Y-%m-%d')}")
 
-@pytest.mark.django_db
-def test_rate_chart_rates(rate_instance):
-    rate_instance.ratecurrency_set.add(*baker.make('RateCurrency', _quantity=10))
-    
-    data = rate_instance.ratecurrency_set.all().values_list('currency__code', 'rate__date', 'value')
-    chart_data = defaultdict(list)
-    for element in data:
-        date = timezone.datetime.combine(element[1], timezone.datetime.min.time())
-        date = timezone.datetime.timestamp(date)*1000
-        chart_data[element[0]].append([date, element[2]])
+    @staticmethod
+    def create_rate_currencies_by_currency_code(currency_code, rate_currencies_quantity):
+        currency = baker.make("quotation.Currency", code=currency_code)
+        rate_currencies = baker.make('quotation.RateCurrency', currency=currency, _quantity=rate_currencies_quantity)
+        return rate_currencies
 
-    assert rate_instance.chart_rates == chart_data
+    def test_rate_chart_rates(self):
+        currency_eur_code = "EUR"
+
+        self.rate.ratecurrency_set.add(
+            *RateModelTestCase.create_rate_currencies_by_currency_code(currency_eur_code, 4))
+
+        chart_rates = self.rate.chart_rates[currency_eur_code]
+        self.assertEquals(len(chart_rates), 4)
+        self.assertEquals(isinstance(chart_rates[0], list), True)

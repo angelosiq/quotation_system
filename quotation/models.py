@@ -47,20 +47,41 @@ class Rate(models.Model):
 
     @cached_property
     def chart_rates(self):
-        data = self.ratecurrency_set.all().order_by('-rate__date').values_list('currency__code', 'rate__date', 'value')
+        def date_to_timestamp_unix_format(date):
+            return (
+                datetime_format := timezone.datetime.combine(date, timezone.datetime.min.time())
+            ) and int(timezone.datetime.timestamp(datetime_format)*1000)
+
+        rate_data = self.ratecurrency_set.all().order_by('-rate__date').values_list(
+                'currency__code', 'rate__date', 'value')
         chart_data = defaultdict(list)
-        for element in data:
-            date = timezone.datetime.combine(element[1], timezone.datetime.min.time())
-            date = timezone.datetime.timestamp(date)*1000
-            chart_data[element[0]].append([date, element[2]])
+
+        for currency_code, rate_date, value in rate_data:
+            chart_data[currency_code].append([date_to_timestamp_unix_format(rate_date), value])
             
         return chart_data
+
+    @staticmethod
+    def chart_formatted_data():
+        formatted_data = defaultdict(list)
+        rates = Rate.objects.all()
+
+        if rates:
+            for rate in rates:
+                for currency, values_list in rate.chart_rates.items():
+                    formatted_data[currency].append(values_list[0])
+
+        return formatted_data
 
 
 class RateCurrency(models.Model):
     """Model definition for RateCurrency."""
 
-    value = models.FloatField(_('Valor'))
+    value = models.DecimalField(
+        _('Valor'),
+        max_digits=10,
+        decimal_places=2
+    )
     currency = models.ForeignKey('quotation.Currency', on_delete=models.CASCADE, verbose_name=_('Moeda'))
     rate = models.ForeignKey('quotation.Rate', on_delete=models.CASCADE, verbose_name=_('Proporção'))
 

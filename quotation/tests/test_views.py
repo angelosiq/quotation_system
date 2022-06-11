@@ -36,7 +36,7 @@ def test_api_rates_without_credentials(api_client):
 def test_api_currencies_check_list(api_client):
     """api rates check list."""
 
-    currencies = baker.make('quotation.Currency', _quantity=10)
+    baker.make('quotation.Currency', _quantity=10)
 
     response = api_client.get(
         f"{ENDPOINT_CURRENCIES}/",

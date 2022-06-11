@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'quotation_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
-        'HOST': config('DB_HOST', default='postgres'),
+        'HOST': config('DB_HOST', default='localhost'),
         'NAME': config('DB_NAME', default='quotation'),
         'USER': config('DB_USER', default='quotation'),
         'PASSWORD': config('DB_PASSWORD', default='quotation_password'),
